@@ -1,0 +1,35 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#020202">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2/dist/tailwind.min.css" type="text/css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" type="text/css">
+<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+<style type="text/css">
+	:root{
+		--page-bg-h:220;
+		--page-bg-s:13;
+		--page-bg-l:15;
+		
+		--page-bg: hsl(var(--page-bg-h), calc(var(--page-bg-s) * 1%), calc(var(--page-bg-l) * 1%));
+		
+		--page-bg-contrast-l: calc((var(--page-bg-l) - 60) * -100%);
+		--page-bg-contrast: hsl(var(--page-bg-h), calc(var(--page-bg-s) * 1%), var(--page-bg-contrast-l));
+	}
+	.base{
+		max-width:42rem;
+		padding-bottom: 42px;
+		
+	}
+	body,html{
+		height:100%;
+		background-color:var(--page-bg);
+		color: var(--page-bg-contrast);
+		font-family: 'IBM Plex Sans', sans-serif;
+		transition: background 1s ease, color 1s ease;
+		
+	}
+	
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>

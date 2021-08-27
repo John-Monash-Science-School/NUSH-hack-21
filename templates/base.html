@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{% block title %}{%endblock%}</title>
+	{% include "head.html" %}
+		
+	{%block headCode %}
+	{%endblock%}
+</head>
+<body>
+    <div class="base mx-auto p-4 text-xl">
+        <header>
+          
+        </header>
+        <main class="mt-12">
+          {% block main %}
+          {%endblock%}
+        </main>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{% block title %}{%endblock%}</title>
+
+	{% include "head.html" %}
+	
+
+	{%block headerScripts%}
+	{%endblock%}
+</head>
+<body>
+
+	<div class="base mx-auto p-4 text-xl" id="appMain">
+		
+	</div>
+	
+
+	<script type="module">
+		// base preact and templating stuff
+		import { html, render, Component, useState, createContext, useContext, useEffect, useMemo } from 'https://unpkg.com/htm/preact/standalone.module.js'
+		
+		// things exported by htm/preact:
+		// { h, html, render, Component, createContext, useState, useReducer, useEffect, 
+		// useLayoutEffect, useRef, useImperativeHandle, useMemo, 
+		// useCallback, useContext, useDebugValue };
+	
+		
+		// lets you define properties of a object.
+		// technically you can do this with public field instances, but safari doesn't support that yet.
+		function _defineProperty(obj, key, value) {
+            if (key in obj) {
+                Object.defineProperty(obj, key, {
+                    value: value,
+                    enumerable: true,
+                    configurable: true,
+                    writable: true
+                });
+            } else {
+                obj[key] = value;
+            }
+            return obj;
+		}
+		
+		let Main = () => { 
+			return html`
+			<p class="leading-tight text-5xl mb-8">
+				Looks like you haven't added any code yet. 
+			</p>
+			<p class="leading-normal text-2xl mb-8">
+				This is the <span class="bg-purple-300 text-black">preact</span> template. If you want the <span class="bg-blue-300 text-black">plain HTML</span> template, change "base_preact.html" to "base.html".
+			</p>
+			<p class="leading-normal text-xl mb-4">
+				Preact is expecting at a custom element to render. Make sure that you <span class="underline">redefine</span> "Main" in your code block. (note: the template already declares "Main")
+			</p>
+			<p class="leading-normal text-xl mb-4">
+				You are currently viewing the default "main" component. Which is this text. (the text at the top that says "header content" is not a component that's been defined.)
+			</p>`
+		}
+		
+        // only really useful if do another room-based thing
+		const roomCode = "{{roomcode}}"
+
+		// dynamic content: {%block code %}
+		// {%endblock%}
+		
+		
+        // if using slots, wrap the entire thing in a SlotProvider
+		function App () {
+			return html`
+                <header id="header">
+                    header content
+                </header>
+                <main class="mt-12" id="main">
+                    <${Main} />
+                </main>
+            `
+		}
+		render(html`<${App}/>`, document.querySelector("#appMain"))
+
+
+
+	</script>
+
+</body>
+</html>
