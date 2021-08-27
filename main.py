@@ -47,6 +47,9 @@ def login(curs):
     if request.method == 'GET':
         return render_template('login.html')
 
+@app.route('/calculator')
+def calculator():
+    return render_template('calculate.html')
 
 ### COMPONENTS FOR PREACT, IF USED ####
 @app.context_processor
