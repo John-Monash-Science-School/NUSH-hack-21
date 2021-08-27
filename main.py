@@ -41,9 +41,9 @@ def socket_event(code, more_args):
 def main():
     return render_template('index.html')
 
-@app.route('/login',methods=["GET,POST"])
+@app.route('/login',methods=["GET","POST"])
 @sql_handler
-def main():
+def login(curs):
     if request.method == 'GET':
         return render_template('login.html')
 
