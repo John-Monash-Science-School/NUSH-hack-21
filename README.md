@@ -20,8 +20,9 @@ NUSH Hack '21 entry for Collective Fullstack (JMSS team)
 
 
 ## Tech stack:
-* css library is a custom version of tailwind that uses css vars for colours.
+* css library is a custom version of tailwind that uses css vars for colours. *please someone remind me to as our final commit remove all unused classes (otherwise the css will be a solid 1.3mb)*
 * flask is the python server library.
 * socket.io handles communications between live clients.
 * preact does client-side reactive ui.
 * mdx-deck does the slides in the deck folder.
+* all icons used are boxicons.
