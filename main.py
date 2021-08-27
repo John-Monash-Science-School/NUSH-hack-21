@@ -1,11 +1,24 @@
 from flask import Flask, request, url_for, render_template, make_response, Markup
 from flask_socketio import SocketIO, join_room, leave_room
 import json
+import sqlite3
 
 
 app = Flask(__name__)
 app.config['DEBUG'] = True if __name__ == '__main__' else False
 socketio = SocketIO(app)
+
+#this is a decorator that handles all of the construction and teardown of sql connections
+def sql_handler(function):
+    def wrapper(*args,**kwargs):
+        conn = sqlite3.connect('./main.db')
+        cursor = conn.cursor()
+        output = function(*args,curs=cursor,**kwargs)
+        conn.commit()
+        conn.close()
+        return output
+    wrapper.__name__ = function.__name__
+    return wrapper
 
 #this one is just for heroku
 def create_app():
@@ -27,6 +40,12 @@ def socket_event(code, more_args):
 @app.route('/')
 def main():
     return render_template('index.html')
+
+@app.route('/login',methods=["GET,POST"])
+@sql_handler
+def main():
+    if request.method == 'GET':
+        return render_template('login.html')
 
 
 ### COMPONENTS FOR PREACT, IF USED ####
