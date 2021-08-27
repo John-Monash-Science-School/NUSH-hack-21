@@ -10,7 +10,15 @@
 	{%endblock%}
 </head>
 <body>
-
+    {% if config['DEBUG'] %}
+        <div class="fixed top-0 right-0 m-8 p-3 text-xs font-mono text-f_inv h-6 w-6 rounded-full flex items-center justify-center bg-b_inv">
+            <div class="block  sm:hidden md:hidden lg:hidden xl:hidden">al</div>
+            <div class="hidden sm:block  md:hidden lg:hidden xl:hidden">sm</div>
+            <div class="hidden sm:hidden md:block  lg:hidden xl:hidden">md</div>
+            <div class="hidden sm:hidden md:hidden lg:block  xl:hidden">lg</div>
+            <div class="hidden sm:hidden md:hidden lg:hidden xl:block">xl</div>
+        </div>
+    {% endif %}
 	<div class="base mx-auto p-4 text-xl" id="appMain">
 		
 	</div>
