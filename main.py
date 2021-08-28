@@ -119,8 +119,10 @@ def signup(curs):
         salt = str(random.randint(10**5,10**6))
         hash = gen_hash(pass1, salt)
 
+        default_pfp = 'https://i.stack.imgur.com/l60Hf.png'
+
         #create user
-        curs.execute('INSERT INTO users (username,password,salt,coins) VALUES (?,?,?,0.00)',(username,hash,salt))
+        curs.execute('INSERT INTO users (username,password,salt,coins,image_link) VALUES (?,?,?,0.00,?)',(username,hash,salt,default_pfp))
 
         return "user created!"
 
@@ -139,15 +141,14 @@ def account(username,curs):
         ownpage = True
     
     #get user info
-    curs.execute('SELECT coins FROM users WHERE username = ?',(username,))
-    coins = curs.fetchone()
-    if not coins:
+    curs.execute('SELECT coins,pfp FROM users WHERE username = ?',(username,))
+    data = curs.fetchone()
+    if not data:
         return "that's not a real account lol"
-    coins = str(round(coins[0], 2))
+    coins = str(round(data[0], 2))
+    pfp = data[1]
 
-    print(ownpage)
-
-    return render_template('account.html',coins=coins,ownpage=ownpage,username=username)
+    return render_template('account.html',coins=coins,ownpage=ownpage,username=username,pfp=pfp)
 
 @app.route('/calculator')
 def calculator():
