@@ -51,7 +51,7 @@
             return obj;
 		}
 		
-        {{component_import("Header")}}
+        {{component_import("Header", "Slot")}}
 
 		let Main = () => { 
 			return html`
@@ -71,7 +71,7 @@
 		
         // only really useful if do another room-based thing
 		const roomCode = "{{roomcode}}"
-
+        const loggedIn = document.cookie.includes('userID')
 
 
 		// dynamic content: {%block code %}
@@ -81,11 +81,15 @@
         // if using slots, wrap the entire thing in a SlotProvider
 		function App () {
 			return html`
-                <${Header} />
+            <${SlotProvider}>
+                <${Header} 
+                    swappableText=${loggedIn ? 'Account' : 'Login'} 
+                    swappableURL=${loggedIn ? '/account' : '/login'} 
+                />
                 <main class="mt-12" id="appMain">
-                    <${Main} />
+                    <${Main}/>
                 </main>
-                
+            <//>
             `
 		}
 		render(html`<${App}/>`, document.querySelector("#appMain"))

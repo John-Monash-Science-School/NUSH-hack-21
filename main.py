@@ -35,7 +35,7 @@ def verify_user(request,curs):
     #check it matches db
     curs.execute('SELECT salt FROM users where username=?',(userID,))
     dbsalt = curs.fetchone()
-    return dbsalt != None and dbsalt[0] != salt
+    return dbsalt != None and dbsalt[0] == salt
 
 #this one is just for heroku
 def create_app():
@@ -53,7 +53,6 @@ def socket_event(code, more_args):
     # socketio.emit('event', dict_data, room=code, broadcast=True)
     pass
 
-
 @app.route('/')
 def main():
     return render_template('index.html')
@@ -63,8 +62,8 @@ def main():
 def usertest(curs):
     logged_in = verify_user(request)
     
-    if logged_in:
-        return "<script>window.location = './login'</script>"
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
     return "you're logged in!"
 
 @app.route('/login',methods=["GET","POST"])
@@ -91,7 +90,7 @@ def login(curs):
         if hash != user[1]:
             return 'wrong password!'
         
-        resp = make_response('Logged in!')
+        resp = make_response(f'<script>window.location = "/account/{username}" </script>')
         #lol this is garbage securitywise
         resp.set_cookie('userID', username)
         resp.set_cookie('salt', salt)
@@ -120,14 +119,66 @@ def signup(curs):
         salt = str(random.randint(10**5,10**6))
         hash = gen_hash(pass1, salt)
 
-        #create user
-        curs.execute('INSERT INTO users (username,password,salt,coins) VALUES (?,?,?,0.00)',(username,hash,salt))
+        default_pfp = 'https://i.stack.imgur.com/l60Hf.png'
 
-        return "user created!"
+        #create user
+        curs.execute('INSERT INTO users (username,password,salt,coins,image_link) VALUES (?,?,?,0.00,?)',(username,hash,salt,default_pfp))
+
+        return make_response(f'<script>window.location = "/account/{username}" </script>')
+
+@app.route('/account/<username>')
+@sql_handler
+def account(username,curs):
+    #check if logged in
+    logged_in = verify_user(request)
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
+    
+    #check if this is the users account
+    ownpage = False
+    userID = request.cookies.get('userID')
+    if userID == username:
+        ownpage = True
+    
+    #get user info
+    curs.execute('SELECT coins,image_link FROM users WHERE username = ?',(username,))
+    data = curs.fetchone()
+    if not data:
+        return "that's not a real account lol"
+    coins = str(round(data[0], 2))
+    pfp = data[1]
+
+    return render_template('account.html',coins=coins,ownpage=ownpage,username=username,pfp=pfp)
+
+#takes the users to their own account
+@app.route('/account/')
+@sql_handler
+def own_account(curs):
+    #check if logged in
+    logged_in = verify_user(request)
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
+    
+    #check if this is the users account
+    userID = request.cookies.get('userID')
+    return f"<script>window.location = '/account/{userID}'</script>"
 
 @app.route('/calculator')
 def calculator():
     return render_template('calculate.html')
+
+@app.route('/search')
+@sql_handler
+def search(curs):
+    #actually search
+    username = request.args.get('username')
+    results = None
+    searched = False
+    if username:
+        curs.execute('SELECT username FROM users WHERE username LIKE ? ORDER BY username DESC',(f'{username}%',))
+        results = curs.fetchall()
+        searched = True
+    return render_template('search.html',results=results,searched=searched)
 
 ### COMPONENTS FOR PREACT, IF USED ####
 @app.context_processor

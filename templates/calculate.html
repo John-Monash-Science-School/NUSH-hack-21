@@ -2,11 +2,52 @@
 
 //{% block code %}
 
+class Calculator extends Component {
+    constructor() {
+        super()
+
+        this.state = {
+            currentTab: "travel" // ("travel" | "energy")
+        }
+
+        _defineProperty(this, "changeTab", (newTab) => {
+            this.setState({currentTab: newTab})
+        })
+    }
+
+
+
+    render() {
+        return html`
+            <div class="flex">
+                <button
+                    onClick=${() => this.changeTab('travel')}
+                    class="text-base flex-grow text-center py-2 w-1/2 mr-1 ${this.state.currentTab === 'travel' ? 'bg-f_med': 'bg-b_med hover:bg-b_high' }"
+                >
+                    travel
+                </button>
+                <button
+                    onClick=${() => this.changeTab('energy')}
+                    class="text-base flex-grow text-center py-2 w-1/2 ml-1 ${this.state.currentTab === 'energy' ? 'bg-f_med': 'bg-b_med hover:bg-b_high' }"
+                >
+                    energy
+                </button>
+            </div>
+            
+        `
+    }
+}
+
+
 Main = () => {
     return html`
-        <div>
-            hello
-        </div>      
+    <h2 class="text-2xl mb-8">
+        Calculate your Carbon Coin use.
+    </h2>
+    <p class="mb-8">
+        Please select an option from below, then follow the prompts to log your Carbon Coin use.
+    </p>
+    <${Calculator} />
     `
 }
 

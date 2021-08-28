@@ -1,10 +1,18 @@
-{% extends "base.html" %}
-{% block main %}
-<h1>Login</h1>
-<form action="#" method="POST">
-    Username: <input type="text" name="user"><br/>
-    Password: <input type="secret" name="pass1"><br/>
-    Confirm Password: <input type="secret" name="pass2"><br/>
-    <input type="submit" value="Login">
+{% extends "base_preact.html" %}
+{% block code %}
+Main = () => html`
+<h2 class="text-2xl mb-8">Sign Up</h2>
+<p class="mb-8">
+    In order to use Carbon Coins, you need an account. <a href="/login" class="underline hover:opacity-80">Login to your account</a> if you already have one.
+</p>
+<form action="#" method="POST" class="block">
+    Username: 
+    <input type="text" placeholder="JoeUsername" name="user" class="input-elem" />
+    Password: 
+    <input type="password" placeholder="••••••••" name="pass1" class="input-elem"/>
+    Confirm Password:
+    <input type="password" placeholder="••••••••" name="pass2" class="input-elem"/>
+    <input type="submit" value="Login" class="block px-4 py-2 text-base bg-b_med hover:bg-b_high cursor-pointer" />
 </form>
+`
 {% endblock %}
