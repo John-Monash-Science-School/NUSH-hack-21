@@ -176,6 +176,28 @@ def addcc(curs):
         curs.execute('UPDATE users SET coins = coins + ?',(amount,))
         return 'added!'
 
+@app.route('/removecc/',methods=['GET','POST'])
+@sql_handler
+def removecc(curs):
+    if request.method == 'GET':
+        return render_template('removecredits.html')
+    else:
+        password = request.form['password']
+        if password != 'SUPERSECRETADMINPASSWORD':
+            return 'WRONG PASSWORD'
+
+        #check user exists
+        username = request.form['username']
+        curs.execute('SELECT * FROM users WHERE username=?',(username,))
+        user = curs.fetchone()
+        if not user:
+            return 'user does not exist'
+
+        #actually remove the coins
+        amount = request.form['amount']
+        curs.execute('UPDATE users SET coins = coins - ? WHERE username=?',(amount,username))
+        return 'removed!'
+
 @app.route('/calculator')
 def calculator():
     return render_template('calculate.html')
@@ -187,6 +209,7 @@ def search(curs):
     username = request.args.get('username')
     results = None
     searched = False
+    print(username)
     if username:
         curs.execute('SELECT username FROM users WHERE username LIKE ? ORDER BY username DESC',(f'{username}%',))
         results = curs.fetchall()
