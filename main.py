@@ -126,7 +126,7 @@ def signup(curs):
 
         return make_response(f'<script>window.location = "/account/{username}" </script>')
 
-@app.route('/account/<username>',methods=["GET","POST"])
+@app.route('/account/<username>')
 @sql_handler
 def account(username,curs):
     #check if logged in
@@ -149,6 +149,19 @@ def account(username,curs):
     pfp = data[1]
 
     return render_template('account.html',coins=coins,ownpage=ownpage,username=username,pfp=pfp)
+
+#takes the users to their own account
+@app.route('/account/')
+@sql_handler
+def own_account(curs):
+    #check if logged in
+    logged_in = verify_user(request)
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
+    
+    #check if this is the users account
+    userID = request.cookies.get('userID')
+    return f"<script>window.location = '/account/{userID}'</script>"
 
 @app.route('/calculator')
 def calculator():
