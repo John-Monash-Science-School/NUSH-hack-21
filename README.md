@@ -4,6 +4,8 @@ NUSH Hack '21 entry for Collective Fullstack (JMSS team)
 
 ## How to use
 * instructions go here
+* Clone the GithHb repository with `git clone https://github.com/John-Monash-Science-School/NUSH-hack-21.git`
+
 
 ## Running locally
 * make sure python3 is installed
