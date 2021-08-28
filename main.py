@@ -122,7 +122,7 @@ def signup(curs):
         #create user
         curs.execute('INSERT INTO users (username,password,salt,coins) VALUES (?,?,?,0.00)',(username,hash,salt))
 
-        return "user created!"
+        return make_response(f'<script>window.location = "/account/{username}" </script>')
 
 @app.route('/account/<username>',methods=["GET","POST"])
 @sql_handler
