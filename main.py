@@ -63,7 +63,7 @@ def usertest(curs):
     logged_in = verify_user(request)
     
     if not logged_in:
-        return "<script>window.location = './login'</script>"
+        return "<script>window.location = '/login'</script>"
     return "you're logged in!"
 
 @app.route('/login',methods=["GET","POST"])
@@ -130,7 +130,7 @@ def account(username,curs):
     #check if logged in
     logged_in = verify_user(request)
     if not logged_in:
-        return "<script>window.location = './login'</script>"
+        return "<script>window.location = '/login'</script>"
     
     #check if this is the users account
     ownpage = False
