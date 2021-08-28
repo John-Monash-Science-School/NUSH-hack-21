@@ -141,7 +141,7 @@ def account(username,curs):
         ownpage = True
     
     #get user info
-    curs.execute('SELECT coins,pfp FROM users WHERE username = ?',(username,))
+    curs.execute('SELECT coins,image_link FROM users WHERE username = ?',(username,))
     data = curs.fetchone()
     if not data:
         return "that's not a real account lol"
