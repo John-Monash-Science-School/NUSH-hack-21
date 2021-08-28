@@ -16,6 +16,10 @@ function Header ({swappableText="Login", swappableURL="/login"}) {
                     <span class="iconify mr-1 text-xl" data-icon="carbon:calculator"></span>
                     <span class="block">Calculate</span>
                 </a>
+                <a href="/trades" class="px-2 py-1 bg-b_med ml-2 hover:bg-b_high inline-flex items-center content-center leading-none">
+                    <span class="iconify mr-1 text-xl" data-icon="carbon:share-knowledge"></span>
+                    <span class="block">Trades</span>
+                </a>
             </nav>
         </header>
     `
