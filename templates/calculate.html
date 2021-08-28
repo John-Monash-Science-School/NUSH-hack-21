@@ -10,30 +10,45 @@ class Calculator extends Component {
             currentTab: "travel", // ("travel" | "energy")
             startLocation: '',
             endLocation: '',
-            transportationType: ''
+            transportationType: '',
+            resultCO2: 'not loaded'
         }
 
         _defineProperty(this, "changeTab", (newTab) => {
             this.setState({currentTab: newTab})
         })
 
-        _defineProperty(this, "getCoinUsage", () => {
+        _defineProperty(this, "getCoinUsage", async (e) => {
             // do fetch stuff here
+            e.preventDefault();
+            console.log(e)
+            const res = await fetch('/api/calc_travel', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'start_location': this.state.startLocation,
+                    'end_location': this.state.endLocation,
+                    'co2_per_km': 182 // change this depending on first option. (182 is average AU car)
+                })
+            }).then(r => r.json()).then(d => this.setState({resultCO2: d.total_co2}))
+            
         })
+
 
         _defineProperty(this, "Tabs", () => {
             if (this.state.currentTab === "travel" ) {
                 return html`
-                    <form>
+                    <form onSubmit=${this.getCoinUsage}>
                         Transportation Type:
                         <select 
                             value=${this.state.transportationType} 
                             onChange=${(e) => this.setState({transportationType: e.target.value})}
                             class="input-elem appearance-none rounded-none"
                         >
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
+                            <option value="A">Average Car</option>
                         </select>
                         Start Location:
                         <input
@@ -53,6 +68,7 @@ class Calculator extends Component {
                             class="input-elem"
                             placeholder="location address" 
                         />
+                        <input type="submit" value="Search" class="block px-4 py-2 text-base bg-b_med hover:bg-b_high cursor-pointer" />
                     </form>
                     
                 `
@@ -83,8 +99,11 @@ class Calculator extends Component {
                     energy
                 </button>
             </div>
-            <div>
+            <div class="mb-8">
                 <${this.Tabs} currentTab=${this.state.currentTab}/>
+            </div>
+            <div>
+                ${this.state.resultCO2 !== "not loaded" && this.state.resultCO2 + 'g'}
             </div>
             
         `
