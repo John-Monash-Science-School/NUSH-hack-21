@@ -5,7 +5,7 @@ NUSH Hack '21 entry for Collective Fullstack (JMSS team)
 ## How to use
 * instructions go here
 * Clone the GithHb repository with `git clone https://github.com/John-Monash-Science-School/NUSH-hack-21.git`
-* Edit nonroutes.py and add your own access token for mapbox
+* Edit nonroutes.py and add your own access token for the mapbox api
 
 
 ## Running locally
@@ -29,3 +29,4 @@ NUSH Hack '21 entry for Collective Fullstack (JMSS team)
 * preact does client-side reactive ui.
 * mdx-deck does the slides in the deck folder.
 * all icons used are done with iconify.
+* Mapbox python module, that communicates with the official Mapbox API to provide accurate distances between two locations
