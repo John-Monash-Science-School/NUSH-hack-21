@@ -226,10 +226,10 @@ def trade(curs):
     #actually do the transaction
     trid = hex(random.randint(10**20,10**30))[2:]
     curs.execute('UPDATE users SET coins = coins - ? WHERE username = ?',(amount,username))
-    curs.execute('INSERT INTO trades (id,sender,receiver,amount,sconfs,rconfs) VALUES (?,?,?,0,0)',(trid,username,receiver,amount))
+    curs.execute('INSERT INTO trades (id,sender,receiver,amount,sconfs,rconfs) VALUES (?,?,?,?,0,0)',(trid,username,receiver,amount))
     return 'traded!'
 
-@app.route('/resolve/<trid>',methods=["POST"])
+@app.route('/resolve/<trid>',methods=["GET","POST"])
 @sql_handler
 def resolve(trid, curs):
     username = request.cookies.get('userID')
@@ -251,7 +251,65 @@ def resolve(trid, curs):
     if username != sender:
         return 'unauthorized, user is not the sender'
 
+    #resolve trade
+    receiver = trade[2]
+    amount = trade[3]
+    curs.execute('UPDATE users SET coins = coins + ? WHERE username = ?',(amount,receiver))
+    curs.execute('DELETE FROM trades WHERE id = ?', (trid,))
+    return 'trade resolved'
+
+#refund
+@app.route('/refund/<trid>',methods=["GET","POST"])
+@sql_handler
+def refund(trid, curs):
+    username = request.cookies.get('userID')
+    logged_in = verify_user(request)
+
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
     
+    #get trade data
+    curs.execute('SELECT * FROM trades WHERE id = ?',(trid,))
+    trade = curs.fetchone()
+
+    #check trade exists
+    if not trade:
+        return 'trade does not exist'
+    
+    #check user is receiver
+    sender = trade[1]
+    receiver = trade[2]
+    if username != receiver:
+        return 'unauthorized, user is not receiver'
+    
+    amount = trade[3]
+    curs.execute('UPDATE users SET coins = coins + ? WHERE username = ?',(amount,sender))
+    curs.execute('DELETE FROM trades WHERE id = ?', (trid,))
+    return 'trade refunded'
+
+@app.route('/trades')
+@sql_handler
+def trades(curs):
+    username = request.cookies.get('userID')
+    logged_in = verify_user(request)
+
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
+
+    #get trade data
+    curs.execute('SELECT (id,sender,receiver,amount) FROM trades WHERE sender = ?',(username,))
+    incoming = curs.fetchall()
+    if not incoming:
+        incoming = []
+    
+    curs.execute('SELECT (id,sender,receiver,amount) FROM trades WHERE receiver = ?',(username,))
+    outgoing = curs.fetchall()
+    if not outgoing:
+        outgoing = []
+    
+    print(incoming)
+    print(outgoing)
+    return render_template('trades.html',incoming=incoming,outgoing=outgoing)
 
 @app.route('/calculator')
 def calculator():
