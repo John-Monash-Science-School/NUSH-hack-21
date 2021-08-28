@@ -217,6 +217,10 @@ def trade(curs):
     amount = int(request.form['amount'])
     if amount > coins:
         return "you're too poor for this action"
+
+    #check amount is positive
+    if amount <= 0:
+        return 'nice try'
     
     #check user ain't receiver
     receiver = request.form['receiver']
@@ -297,12 +301,12 @@ def trades(curs):
         return "<script>window.location = '/login'</script>"
 
     #get trade data
-    curs.execute('SELECT (id,sender,receiver,amount) FROM trades WHERE sender = ?',(username,))
+    curs.execute('SELECT id,sender,receiver,amount FROM trades WHERE receiver = ?',(username,))
     incoming = curs.fetchall()
     if not incoming:
         incoming = []
     
-    curs.execute('SELECT (id,sender,receiver,amount) FROM trades WHERE receiver = ?',(username,))
+    curs.execute('SELECT id,sender,receiver,amount FROM trades WHERE sender = ?',(username,))
     outgoing = curs.fetchall()
     if not outgoing:
         outgoing = []
