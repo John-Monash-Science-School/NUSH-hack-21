@@ -35,7 +35,7 @@ def verify_user(request,curs):
     #check it matches db
     curs.execute('SELECT salt FROM users where username=?',(userID,))
     dbsalt = curs.fetchone()
-    return dbsalt != None and dbsalt[0] != salt
+    return dbsalt != None and dbsalt[0] == salt
 
 #this one is just for heroku
 def create_app():
@@ -53,7 +53,6 @@ def socket_event(code, more_args):
     # socketio.emit('event', dict_data, room=code, broadcast=True)
     pass
 
-
 @app.route('/')
 def main():
     return render_template('index.html')
@@ -63,7 +62,7 @@ def main():
 def usertest(curs):
     logged_in = verify_user(request)
     
-    if logged_in:
+    if not logged_in:
         return "<script>window.location = './login'</script>"
     return "you're logged in!"
 
@@ -124,6 +123,31 @@ def signup(curs):
         curs.execute('INSERT INTO users (username,password,salt,coins) VALUES (?,?,?,0.00)',(username,hash,salt))
 
         return "user created!"
+
+@app.route('/account/<username>',methods=["GET","POST"])
+@sql_handler
+def account(username,curs):
+    #check if logged in
+    logged_in = verify_user(request)
+    if not logged_in:
+        return "<script>window.location = './login'</script>"
+    
+    #check if this is the users account
+    ownpage = False
+    userID = request.cookies.get('userID')
+    if userID == username:
+        ownpage = True
+    
+    #get user info
+    curs.execute('SELECT coins FROM users WHERE username = ?',(username,))
+    coins = curs.fetchone()
+    if not coins:
+        return "that's not a real account lol"
+    coins = str(round(coins[0], 2))
+
+    print(ownpage)
+
+    return render_template('account.html',coins=coins,ownpage=ownpage,username=username)
 
 @app.route('/calculator')
 def calculator():
