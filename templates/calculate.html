@@ -7,11 +7,61 @@ class Calculator extends Component {
         super()
 
         this.state = {
-            currentTab: "travel" // ("travel" | "energy")
+            currentTab: "travel", // ("travel" | "energy")
+            startLocation: '',
+            endLocation: '',
+            transportationType: ''
         }
 
         _defineProperty(this, "changeTab", (newTab) => {
             this.setState({currentTab: newTab})
+        })
+
+        _defineProperty(this, "getCoinUsage", () => {
+            // do fetch stuff here
+        })
+
+        _defineProperty(this, "Tabs", () => {
+            if (this.state.currentTab === "travel" ) {
+                return html`
+                    <form>
+                        Transportation Type:
+                        <select 
+                            value=${this.state.transportationType} 
+                            onChange=${(e) => this.setState({transportationType: e.target.value})}
+                            class="input-elem appearance-none rounded-none"
+                        >
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                        Start Location:
+                        <input
+                            type="text" 
+                            name="start location" 
+                            value=${this.state.startLocation} 
+                            onInput=${(e) => this.setState({startLocation: e.target.value})}
+                            class="input-elem" 
+                            placeholder="location address"
+                        />
+                        End Location:
+                        <input
+                            type="text" 
+                            name="end location" 
+                            value=${this.state.endLocation} 
+                            onInput=${(e) => this.setState({endLocation: e.target.value})}
+                            class="input-elem"
+                            placeholder="location address" 
+                        />
+                    </form>
+                    
+                `
+            }
+            if (this.state.currentTab === "energy") {
+                return html` 
+                    Energy calculator is not ready yet.
+                `
+            }
         })
     }
 
@@ -19,7 +69,7 @@ class Calculator extends Component {
 
     render() {
         return html`
-            <div class="flex">
+            <div class="flex mb-8">
                 <button
                     onClick=${() => this.changeTab('travel')}
                     class="text-base flex-grow text-center py-2 w-1/2 mr-1 ${this.state.currentTab === 'travel' ? 'bg-f_med': 'bg-b_med hover:bg-b_high' }"
@@ -32,6 +82,9 @@ class Calculator extends Component {
                 >
                     energy
                 </button>
+            </div>
+            <div>
+                <${this.Tabs} currentTab=${this.state.currentTab}/>
             </div>
             
         `
