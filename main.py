@@ -63,7 +63,7 @@ def usertest(curs):
     logged_in = verify_user(request)
     
     if not logged_in:
-        return "<script>window.location = './login'</script>"
+        return "<script>window.location = '/login'</script>"
     return "you're logged in!"
 
 @app.route('/login',methods=["GET","POST"])
@@ -90,7 +90,7 @@ def login(curs):
         if hash != user[1]:
             return 'wrong password!'
         
-        resp = make_response('Logged in!')
+        resp = make_response(f'<script>window.location = "/account/{username}" </script>')
         #lol this is garbage securitywise
         resp.set_cookie('userID', username)
         resp.set_cookie('salt', salt)
@@ -124,7 +124,7 @@ def signup(curs):
         #create user
         curs.execute('INSERT INTO users (username,password,salt,coins,image_link) VALUES (?,?,?,0.00,?)',(username,hash,salt,default_pfp))
 
-        return "user created!"
+        return make_response(f'<script>window.location = "/account/{username}" </script>')
 
 @app.route('/account/<username>',methods=["GET","POST"])
 @sql_handler
@@ -132,7 +132,7 @@ def account(username,curs):
     #check if logged in
     logged_in = verify_user(request)
     if not logged_in:
-        return "<script>window.location = './login'</script>"
+        return "<script>window.location = '/login'</script>"
     
     #check if this is the users account
     ownpage = False
