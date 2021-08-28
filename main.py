@@ -271,12 +271,13 @@ def search(curs):
         searched = True
     return render_template('search.html',results=results,searched=searched)
 
-@app.route('/api/calc_travel')
-def api_calculate_travel(curs):
+@app.route('/api/calc_travel',methods=['GET','POST'])
+def api_calculate_travel():
     # needs start_location, end_location, co2_per_km
-    start_location = request.args['start_location']
-    end_location = request.args['end_location']
-    co2_per_km = request.args['co2_per_km']
+    data = request.json
+    start_location = data['start_location']
+    end_location = data['end_location']
+    co2_per_km = data['co2_per_km']
 
     calc_out = travel_calculator(start_location, end_location, float(co2_per_km))
     return Response(json.dumps(calc_out), mimetype='application/json')

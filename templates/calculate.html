@@ -7,11 +7,90 @@ class Calculator extends Component {
         super()
 
         this.state = {
-            currentTab: "travel" // ("travel" | "energy")
+            currentTab: "travel", // ("travel" | "energy")
+            startLocation: '',
+            endLocation: '',
+            transportationType: '',
+            resultCO2: 'not loaded'
         }
 
         _defineProperty(this, "changeTab", (newTab) => {
             this.setState({currentTab: newTab})
+        })
+
+        _defineProperty(this, "getCoinUsage", async (e) => {
+            // do fetch stuff here
+            e.preventDefault();
+            //console.log(e)
+            const transportCO2per = {
+                "average car": 182,
+                "efficient car": 120,
+                "plane": 115,
+                "train": 49,
+                "bicycle": 16
+            }[this.state.transportationType];
+           
+
+            const res = await fetch('/api/calc_travel', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'start_location': this.state.startLocation,
+                    'end_location': this.state.endLocation,
+                    'co2_per_km': transportCO2per // change this depending on first option. (182 is average AU car)
+                })
+            }).then(r => r.json()).then(d => this.setState({resultCO2: d.total_co2}))
+            
+        })
+
+
+        _defineProperty(this, "Tabs", () => {
+            if (this.state.currentTab === "travel" ) {
+                return html`
+                    <form onSubmit=${this.getCoinUsage}>
+                        Transportation Type:
+                        <select 
+                            value=${this.state.transportationType} 
+                            onChange=${(e) => this.setState({transportationType: e.target.value})}
+                            class="input-elem appearance-none rounded-none"
+                        >
+                            <option value="average car">Average Car</option>
+                            <option value="efficient car">Energy Efficient Car</option>
+                            <option value="plane">Plane</option>
+                            <option value="train">Train</option>
+                            <option value="bicycle">Bicycle</option>
+                        </select>
+                        Start Location:
+                        <input
+                            type="text" 
+                            name="start location" 
+                            value=${this.state.startLocation} 
+                            onInput=${(e) => this.setState({startLocation: e.target.value})}
+                            class="input-elem" 
+                            placeholder="location address"
+                        />
+                        End Location:
+                        <input
+                            type="text" 
+                            name="end location" 
+                            value=${this.state.endLocation} 
+                            onInput=${(e) => this.setState({endLocation: e.target.value})}
+                            class="input-elem"
+                            placeholder="location address" 
+                        />
+                        <input type="submit" value="Search" class="block px-4 py-2 text-base bg-b_med hover:bg-b_high cursor-pointer" />
+                    </form>
+                    
+                `
+            }
+            if (this.state.currentTab === "energy") {
+                return html` 
+                    Energy calculator is not ready yet.
+                `
+            }
         })
     }
 
@@ -19,7 +98,7 @@ class Calculator extends Component {
 
     render() {
         return html`
-            <div class="flex">
+            <div class="flex mb-8">
                 <button
                     onClick=${() => this.changeTab('travel')}
                     class="text-base flex-grow text-center py-2 w-1/2 mr-1 ${this.state.currentTab === 'travel' ? 'bg-f_med': 'bg-b_med hover:bg-b_high' }"
@@ -32,6 +111,12 @@ class Calculator extends Component {
                 >
                     energy
                 </button>
+            </div>
+            <div class="mb-8">
+                <${this.Tabs} currentTab=${this.state.currentTab}/>
+            </div>
+            <div>
+                ${this.state.resultCO2 !== "not loaded" && this.state.resultCO2 + ' carbon coins'}
             </div>
             
         `

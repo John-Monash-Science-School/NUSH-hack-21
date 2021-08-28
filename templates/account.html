@@ -1,21 +1,81 @@
 {% extends "base_preact.html" %}
 // {% block code %}
-Main = () => html`
-<div class="mb-8 flex items-center">
-    <img src="{{pfp}}" alt="profile picture" class="h-24 w-24 rounded-full"/>
-    <div class=" ml-8">
-        <h2 class="text-2xl">
-            {{username}}
-        </h2>
-        <p class="mb-8">
-            Coins: {{coins}}<br/>
-            {% if not ownpage %}
-                <button onClick="alert(1)">Propose trade</button>
-            {% endif %}
-        </p>
-    </div>
-    
-</div>
 
+class Account extends Component {
+    constructor() {
+        super()
+        this.state = {
+            modalOpen: true,
+        }
+
+        _defineProperty(this, "toggleModal", (e) => {
+            e.preventDefault()
+            this.setState({modalOpen: !this.state.modalOpen})
+        })
+
+        _defineProperty(this, "modal", () => {
+            if (!this.state.modalOpen) {
+                return html``
+            }
+            return html`
+                <div class="fixed top-0 bottom-0 right-0 left-0 height-full width-full flex flex-col">
+                    <div class="flex-grow bg-b_low opacity-50 flex items-end " onClick=${this.toggleModal}>
+                        <div className="pb-2 text-f_high mx-auto">
+                        Click here to go back.
+                        </div>
+                        
+                    </div>
+                    <div class="bg-b_inv text-f_inv">
+                        <div class="max-w-2xl px-4 mx-auto pt-11 pb-20">
+                            <h2 class="text-2xl mb-8">
+                                Propose trade with {{username}}
+                            </h2>
+
+                            <form action="/trade" method="POST" class="block">
+                                <input type="text" value="{{username}}" name="receiver" class="hidden" aria-hidden />
+                                Amount to send:
+                                <input type="numerical" placeholder="1234" name="amount" class="border-f_inv border-2 block w-full px-4 py-2 focus:border-f_low focus:outline-none placeholder-f_low mb-4 bg-f_high"/>
+                                Password: 
+                                <input type="password" placeholder="••••••••" name="password" class="border-f_inv border-2 block w-full px-4 py-2 focus:border-f_low focus:outline-none placeholder-f_low mb-4 bg-f_high"/>
+                                <input type="submit" value="Propose Trade" class="block px-4 py-2 text-base bg-f_high hover:opacity-80 cursor-pointer" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `
+        })
+    }
+
+    render() {
+        
+        return html`
+        <div class="mb-8 flex items-center">
+            <img src="{{pfp}}" alt="profile picture" class="h-24 w-24 rounded-full"/>
+            <div class=" ml-8">
+                <h2 class="text-2xl leading-none mb-2">
+                    {{username}}
+                </h2>
+                <p class="flex items-center">
+                    Coins: {{coins}}
+                    {% if not ownpage %}
+                        <button
+                            onClick=${this.toggleModal}
+                            class="px-2 py-1 bg-b_med ml-2 hover:bg-b_high inline-flex items-center content-center leading-none"
+                        >
+                            <!-- the icon does weird things
+                            <span class="iconify mr-1 text-xl" data-icon="carbon:share-knowledge"></span>-->
+                            <span>Propose trade</span>
+                        </button>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <${this.modal} />
+        `
+    }
+}
+
+Main = () => html`
+    <${Account} />
 `
 //{% endblock %}

@@ -36,11 +36,53 @@ def travel_calculator(start_location, end_location, co2_per_km):
     #print(driving_routes)
 
     #co2_g_per_km = input(float("Enter in how much CO2 is given per km in grams: "))
-    distance_of_trip = driving_routes['distance']
+    #print(driving_routes)
+    distance_of_trip = driving_routes['features'][0]['properties']['distance']
     total = distance_of_trip * co2_per_km
     #print(f"You will be usng {total} grams of CO2")
     # add something about those carbon tokens
-    out["total_co2"] = total
+    # multiply to get in tonnes
+    out["total_co2"] = total * 0.000001
     return out
 
+def power_calculator(source, GJ):
+    out = {}
 
+    # somehow got to change it so it can work with the site, here it is
+    # source is where comes from
+    # GJ is how much power has been used in gigajoules in the last 24 hours
+    out["type"] = "success"
+    total_tonnes = 0
+    if source == "solar":  
+        #print("No carbon coins deducted")
+        total_tonnes = 0
+    elif source == "wind":
+        #print("No carbon coins deducted")
+        total_tonnes = 0
+    elif source == "hydro":
+        #print("No carbon coins deducted")
+        total_tonnes = 0
+    elif source == "natural gas":
+        natural_gas_estimate = 0.0537 # 0.0537 tonnes of CO2 from 1 GJ of Natural Gas
+        total_tonnes = natural_gas_estimate * GJ
+        #print(total_tonnes) 
+    elif source == "diesel":
+        diesel_estimate = 0.069337442218798 # tonnes of CO2 from 1 GJ of Diesel
+        total_tonnes = diesel_estimate * GJ
+        #print(total_tonnes)
+    elif source == "nuclear":
+        #print("No carbon coins deducted")
+        total_tonnes = 0
+    elif source == "black coal":
+        black_coal_estimate = 0.088547008547009
+        total_tonnes = black_coal_estimate * GJ
+        #print(total_tonnes)
+    elif source == "brown coal":
+        brown_coal_estimate = 0.09387222946545
+        total_tonnes = brown_coal_estimate * GJ
+        #print(total_tonnes)
+    else:
+        #print("Some fields are blank. Please go back")
+        out["type"] = "error"
+    out["total"] = total_tonnes
+    return out
