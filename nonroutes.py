@@ -36,5 +36,5 @@ def calculator:
     co2_g_per_km = input(float("Enter in how much CO2 is given per km in grams: "))
     distance_of_trip = driving_routes['distance']
     total = distance_of_trip * co2_g_per_km
-    print(f"You will be usng {total} grams of CO2}")
+    print(f"You will be usng {total} grams of CO2")
     # add something about those carbon tokens
