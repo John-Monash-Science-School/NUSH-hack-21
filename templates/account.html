@@ -34,7 +34,7 @@ class Account extends Component {
                             <form action="/trade" method="POST" class="block">
                                 <input type="text" value="{{username}}" name="receiver" class="hidden" aria-hidden />
                                 Amount to send:
-                                <input type="numerical" placeholder="1234" name="amount" class="border-f_inv border-2 block w-full px-4 py-2 focus:border-f_low focus:outline-none placeholder-f_low mb-4 bg-f_high"/>
+                                <input type="number" placeholder="1234" name="amount" class="border-f_inv border-2 block w-full px-4 py-2 focus:border-f_low focus:outline-none placeholder-f_low mb-4 bg-f_high"/>
                                 Password: 
                                 <input type="password" placeholder="••••••••" name="password" class="border-f_inv border-2 block w-full px-4 py-2 focus:border-f_low focus:outline-none placeholder-f_low mb-4 bg-f_high"/>
                                 <input type="submit" value="Propose Trade" class="block px-4 py-2 border-2 border-f_inv text-base bg-f_high hover:opacity-80 cursor-pointer" />
