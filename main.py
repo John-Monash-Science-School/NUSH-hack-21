@@ -90,7 +90,7 @@ def login(curs):
         if hash != user[1]:
             return 'wrong password!'
         
-        resp = make_response('Logged in!')
+        resp = make_response(f'<script>window.location = "/account/{username}" </script>')
         #lol this is garbage securitywise
         resp.set_cookie('userID', username)
         resp.set_cookie('salt', salt)
