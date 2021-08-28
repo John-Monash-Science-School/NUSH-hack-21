@@ -21,7 +21,16 @@ class Calculator extends Component {
         _defineProperty(this, "getCoinUsage", async (e) => {
             // do fetch stuff here
             e.preventDefault();
-            console.log(e)
+            //console.log(e)
+            const transportCO2per = {
+                "average car": 182,
+                "efficient car": 120,
+                "plane": 115,
+                "train": 49,
+                "bicycle": 16
+            }[this.state.transportationType];
+           
+
             const res = await fetch('/api/calc_travel', {
                 method: 'post',
                 headers: {
@@ -31,7 +40,7 @@ class Calculator extends Component {
                 body: JSON.stringify({
                     'start_location': this.state.startLocation,
                     'end_location': this.state.endLocation,
-                    'co2_per_km': 182 // change this depending on first option. (182 is average AU car)
+                    'co2_per_km': transportCO2per // change this depending on first option. (182 is average AU car)
                 })
             }).then(r => r.json()).then(d => this.setState({resultCO2: d.total_co2}))
             
@@ -48,7 +57,11 @@ class Calculator extends Component {
                             onChange=${(e) => this.setState({transportationType: e.target.value})}
                             class="input-elem appearance-none rounded-none"
                         >
-                            <option value="A">Average Car</option>
+                            <option value="average car">Average Car</option>
+                            <option value="efficient car">Energy Efficient Car</option>
+                            <option value="plane">Plane</option>
+                            <option value="train">Train</option>
+                            <option value="bicycle">Bicycle</option>
                         </select>
                         Start Location:
                         <input
