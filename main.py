@@ -125,6 +125,10 @@ def signup(curs):
 
         return "user created!"
 
+@app.route('/calculator')
+def calculator():
+    return render_template('calculate.html')
+
 ### COMPONENTS FOR PREACT, IF USED ####
 @app.context_processor
 def component_processor():

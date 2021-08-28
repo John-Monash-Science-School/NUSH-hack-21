@@ -25,4 +25,4 @@ NUSH Hack '21 entry for Collective Fullstack (JMSS team)
 * socket.io handles communications between live clients.
 * preact does client-side reactive ui.
 * mdx-deck does the slides in the deck folder.
-* all icons used are boxicons.
+* all icons used are done with iconify.
