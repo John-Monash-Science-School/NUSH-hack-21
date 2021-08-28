@@ -45,4 +45,37 @@ def travel_calculator(start_location, end_location, co2_per_km):
     out["total_co2"] = total * 0.000001
     return out
 
+def power_calculator(source, GJ, total_tonnes):
+    out = {}
+
+    # somehow got to change it so it can work with the site, here it is
+
+    source = input("Enter in source: ")
+    GJ = float(input("Enter how much power has been used in gigajoules in the last 24 hours: "))
+    if source == "solar":  
+        print("No carbon coins deducted")
+    elif source == "wind":
+        print("No carbon coins deducted")
+    elif source == "hydro":
+        print("No carbon coins deducted")
+    elif source == "natural gas"
+        natural_gas_estimate = 0.0537 # 0.0537 tonnes of CO2 from 1 GJ of Natural Gas
+        total_tonnes = natural_gas_used * GJ
+        print(total_tonnes) 
+    elif source == "diesel":
+        diesel_estimate = 0.069337442218798 # tonnes of CO2 from 1 GJ of Diesel
+        total_tonnes = diesel_estimate * GJ
+        print(total_tonnes)
+    elif source == "nuclear":
+        print("No carbon coins deducted")
+    elif source == "black coal":
+        black_coal_estimate = 0.088547008547009
+        total_tonnes = black_coal_estimate * GJ
+        print(total_tonnes)
+    elif source == "brown coal":
+        brown_coal_estimate = 0.09387222946545
+        total_tonnes = brown_coal_estimate * GJ
+        print(total_tonnes)
+    else:
+        print("Some fields are blank. Please go back")
 
