@@ -28,9 +28,9 @@ def generate(size,curs):
         hash = gen_hash(pass1, salt)
 
         username = person['login']['username']
-        pfp = person['picture']['thumbnail']
+        pfp = person['picture']['large']
 
         #create user
         curs.execute('INSERT INTO users (username,password,salt,coins,image_link) VALUES (?,?,?,0.00,?)',(username,hash,salt,pfp))
 
-generate(50)
+generate(150)
