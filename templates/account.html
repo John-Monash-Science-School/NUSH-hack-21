@@ -1,0 +1,14 @@
+{% extends "base_preact.html" %}
+// {% block code %}
+Main = () => html`
+<h2 class="text-2xl mb-8">
+    {{username}}
+</h2>
+<p class="mb-8">
+    Coins: {{coins}}<br/>
+    {% if not ownpage %}
+        <button onClick="alert(1)">Propose trade</button>
+    {% endif %}
+</p>
+`
+//{% endblock %}
