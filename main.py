@@ -163,6 +163,19 @@ def own_account(curs):
     userID = request.cookies.get('userID')
     return f"<script>window.location = '/account/{userID}'</script>"
 
+@app.route('/addcc/',methods=['GET','POST'])
+@sql_handler
+def addcc(curs):
+    if request.method == 'GET':
+        return render_template('addcredits.html')
+    else:
+        password = request.form['password']
+        if password != 'SUPERSECRETADMINPASSWORD':
+            return 'WRONG PASSWORD'
+        amount = request.form['amount']
+        curs.execute('UPDATE users SET coins = coins + ?',(amount,))
+        return 'added!'
+
 @app.route('/calculator')
 def calculator():
     return render_template('calculate.html')

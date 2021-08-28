@@ -1,0 +1,15 @@
+{% extends "base_preact.html" %}
+{% block code %}
+Main = () => html`
+<h2 class="text-2xl mb-8">Add CC to all accounts</h2>
+<p class="mb-8">
+</p>
+<form action="#" method="POST" class="block">
+    Amount: 
+    <input type="text" placeholder="10" name="amount" class="input-elem" />
+    Admin Password: 
+    <input type="password" placeholder="••••••••" name="password" class="input-elem"/>
+    <input type="submit" value="Login" class="block px-4 py-2 text-base bg-b_med hover:bg-b_high cursor-pointer" />
+</form>
+`
+{% endblock %}
