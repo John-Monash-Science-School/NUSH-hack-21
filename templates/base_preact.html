@@ -71,7 +71,7 @@
 		
         // only really useful if do another room-based thing
 		const roomCode = "{{roomcode}}"
-
+        const loggedIn = document.cookie.includes('userID')
 
 
 		// dynamic content: {%block code %}
@@ -82,9 +82,12 @@
 		function App () {
 			return html`
             <${SlotProvider}>
-                <${Header} />
+                <${Header} 
+                    swappableText=${loggedIn ? 'Account' : 'Login'} 
+                    swappableURL=${loggedIn ? '/account' : '/login'} 
+                />
                 <main class="mt-12" id="appMain">
-                    <${Main} />
+                    <${Main}/>
                 </main>
             <//>
             `
