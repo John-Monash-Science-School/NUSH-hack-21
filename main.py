@@ -157,11 +157,11 @@ def calculator():
 @sql_handler
 def search(curs):
     #actually search
-    username = request.form.get('username')
+    username = request.args.get('username')
     results = None
     searched = False
     if username:
-        curs.execute('SELECT username FROM users WHERE username LIKE ?',(username,))
+        curs.execute('SELECT username FROM users WHERE username LIKE ? ORDER BY username DESC',(f'{username}%',))
         results = curs.fetchall()
         searched = True
     return render_template('search.html',results=results,searched=searched)
