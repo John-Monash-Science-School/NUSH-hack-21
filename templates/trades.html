@@ -1,0 +1,58 @@
+{%extends "base_preact.html"%}
+
+// {%block code%}
+
+Main = () => html`
+<h2 class="mb-8 text-2xl">
+    Trades
+</h2>
+
+<div class="mb-8">
+    <h3 class="text-xl mb-4">Incoming Trades:</h3>
+    <table class="w-full text-left">
+        <thead >
+            <tr class="border-b-2 border-b_med">
+                <th class="pb-2">from</th>
+                <th class="pb-2">amount</th>
+                <th class="pb-2">refund?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in incoming %}
+                <tr class="border-b-2 border-b_med">
+                    <td class="py-4">{{i[2]}}</td>
+                    <td class="py-4">{{i[3]}}cc</td>
+                    <th class="py-4">
+                        <a href="/refund/{{i[0]}}" class="px-2 py-1 bg-b_med hover:bg-b_high inline-flex items-center content-center leading-none">refund</a>
+                    </th>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+<div class="mb-8">
+    <h3 class="text-xl mb-4">Outgoing Trades:</h3>
+    <table class="w-full text-left">
+        <thead >
+            <tr class="border-b-2 border-b_med">
+                <th class="pb-2">from</th>
+                <th class="pb-2">amount</th>
+                <th class="pb-2">confirm?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in outgoing %}
+                <tr class="border-b-2 border-b_med">
+                    <td class="py-4">{{i[1]}}</td>
+                    <td class="py-4">{{i[3]}}cc</td>
+                    <th class="py-4">
+                        <a href="/refund/{{i[0]}}" class="px-2 py-1 bg-b_med hover:bg-b_high inline-flex items-center content-center leading-none">refund</a>
+                    </th>
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+`
+// {%endblock%}
