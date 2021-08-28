@@ -3,10 +3,7 @@ NUSH Hack '21 entry for Collective Fullstack (JMSS team)
 
 
 ## How to use
-* instructions go here
-* Clone the GithHb repository with `git clone https://github.com/John-Monash-Science-School/NUSH-hack-21.git`
-* Edit nonroutes.py and add your own access token for the mapbox api
-
+visit https://carboncoins.pythonanywhere.com/ in your web browser to load the site.
 
 ## Running locally
 * make sure python3 is installed
