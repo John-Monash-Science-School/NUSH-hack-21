@@ -1,3 +1,4 @@
+from logging import log
 from flask import Flask, request, url_for, render_template, make_response, Markup, Response
 from flask_socketio import SocketIO, join_room, leave_room
 from nonroutes import *
@@ -60,11 +61,7 @@ def main():
 @app.route('/usertest')
 @sql_handler
 def usertest(curs):
-    logged_in = verify_user(request)
-    
-    if not logged_in:
-        return "<script>window.location = '/login'</script>"
-    return "you're logged in!"
+    return render_template('tradetest.html')
 
 @app.route('/login',methods=["GET","POST"])
 @sql_handler
@@ -197,6 +194,64 @@ def removecc(curs):
         amount = request.form['amount']
         curs.execute('UPDATE users SET coins = coins - ? WHERE username=?',(amount,username))
         return 'removed!'
+
+@app.route('/trade',methods=['POST'])
+@sql_handler
+def trade(curs):
+    #check log in status
+    password = request.form['password']
+    username = request.cookies.get('userID')
+    logged_in = verify_user(request)
+
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
+
+    #check password is correct
+    curs.execute('SELECT password,salt,coins FROM users WHERE username=?',(username,))
+    hash, salt, coins = curs.fetchone()
+    newhash = gen_hash(password,salt)
+    if newhash != hash:
+        return 'WRONG PASSWORD'
+    
+    #check the current user has enough coins
+    amount = int(request.form['amount'])
+    if amount > coins:
+        return "you're too poor for this action"
+    
+    #check user ain't receiver
+    receiver = request.form['receiver']
+    if username == receiver:
+        return "you can't send money to yourself"
+
+    #actually do the transaction
+    trid = hex(random.randint(10**20,10**30))[2:]
+    curs.execute('UPDATE users SET coins = coins - ? WHERE username = ?',(amount,username))
+    curs.execute('INSERT INTO trades (id,sender,receiver,amount,sconfs,rconfs) VALUES (?,?,?,0,0)',(trid,username,receiver,amount))
+    return 'traded!'
+
+@app.route('/resolve/<trid>',methods=["POST"])
+@sql_handler
+def resolve(trid, curs):
+    username = request.cookies.get('userID')
+    logged_in = verify_user(request)
+
+    if not logged_in:
+        return "<script>window.location = '/login'</script>"
+    
+    #get trade data
+    curs.execute('SELECT * FROM trades WHERE id = ?',(trid,))
+    trade = curs.fetchone()
+
+    #check trade exists
+    if not trade:
+        return 'trade does not exist'
+    
+    #check user is sender
+    sender = trade[1]
+    if username != sender:
+        return 'unauthorized, user is not the sender'
+
+    
 
 @app.route('/calculator')
 def calculator():
