@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "npx tailwindcss -o ../static/tailwind.css --minify",
-    "build:prod": "NODE_ENV=production npx tailwindcss -o ../static/tailwind.css --minify"
+    "build:dev": "tailwindcss -i styles.css -o ../static/tailwind.css --minify",
+    "build:prod": "NODE_ENV=production tailwindcss build styles.css -o ../static/tailwind.css --minify"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.3.3",
-    "postcss": "^8.3.6"
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.8"
   }
 }
