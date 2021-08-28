@@ -1,0 +1,25 @@
+{% extends "base_preact.html" %}
+// {% block code %}
+Main = () => html`
+<h2 class="text-2xl mb-8">
+    Search
+</h2>
+
+<form method="GET" action="#" class="text-2xl mb-8">
+    Username: <input type="text" name="username">
+    <input type="submit" value="Search">
+</form>
+
+<div id="results" class="text-2xl mb-8">
+    {% if results %}
+        {% for result in results %}
+            <a href="./account/{{result[0]}}">{{result}}</a><br/>
+        {% endfor %}
+    {% elif searched %}
+        No results
+    {% endif %}
+</div>
+
+
+`
+//{% endblock %}

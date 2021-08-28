@@ -153,6 +153,19 @@ def account(username,curs):
 def calculator():
     return render_template('calculate.html')
 
+@app.route('/search')
+@sql_handler
+def search(curs):
+    #actually search
+    username = request.form.get('username')
+    results = None
+    searched = False
+    if username:
+        curs.execute('SELECT username FROM users WHERE username LIKE ?',(username,))
+        results = curs.fetchall()
+        searched = True
+    return render_template('search.html',results=results,searched=searched)
+
 ### COMPONENTS FOR PREACT, IF USED ####
 @app.context_processor
 def component_processor():
